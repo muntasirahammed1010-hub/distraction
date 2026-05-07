@@ -1,0 +1,26 @@
+{
+  "name": "anti-distraction-ecosystem",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Anti-Distraction EdTech Ecosystem — Monorepo",
+
+  "workspaces": [
+    "web-app",
+    "chrome-extension"
+  ],
+
+  "scripts": {
+    "dev":        "npm run dev --workspace=web-app",
+    "build:web":  "npm run build --workspace=web-app",
+    "build:ext":  "npm run build --workspace=chrome-extension",
+    "build":      "npm run build:web && npm run build:ext",
+    "db:migrate": "npm run prisma migrate dev --workspace=web-app",
+    "db:studio":  "npm run prisma studio --workspace=web-app",
+    "lint":       "npm run lint --workspaces"
+  },
+
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

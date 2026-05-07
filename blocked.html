@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+  blocked.html — The Wall of Shame
+  ============================================================
+  Displayed when declarativeNetRequest redirects a user to this
+  page because they tried to open a blocked site.
+
+  SECURITY (MV3 CSP compliance):
+  - NO inline <script> tags — all JS is in blocked.js (loaded externally)
+  - NO inline <style> — styles are in blocked.css
+  - NO eval() or Function() constructors
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blocked — FocusForge</title>
+  <!-- External CSS — MV3 compliant (no inline styles) -->
+  <link rel="stylesheet" href="blocked.css" />
+  <!-- Google Fonts loaded via link tag (allowed by our CSP) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <div class="container">
+    <!-- Shield icon -->
+    <div class="shield-icon" aria-hidden="true">🛡️</div>
+
+    <!-- Headline -->
+    <h1 class="headline">BLOCKED.</h1>
+
+    <!-- Site that was blocked — populated by blocked.js from ?site= query param -->
+    <p class="site-name" id="site-name">Loading...</p>
+
+    <!-- Roast container — populated by blocked.js after API call -->
+    <div class="roast-card" id="roast-card" aria-live="polite">
+      <div class="roast-loading" id="roast-loading">
+        <span class="spinner"></span>
+        Professor Pepper is cooking up a roast...
+      </div>
+      <div class="roast-text hidden" id="roast-text">
+        <!-- Populated by blocked.js -->
+        <p id="roast-line1"></p>
+        <p id="roast-line2"></p>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="actions">
+      <button id="go-back-btn" class="btn btn-primary">
+        ← Go Back to Studying
+      </button>
+      <a
+        id="dashboard-link"
+        href="#"
+        class="btn btn-secondary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open Dashboard
+      </a>
+    </div>
+
+    <!-- Focus session timer (read from storage) -->
+    <p class="session-info" id="session-info">
+      Focus Session is active. Don't give up now.
+    </p>
+  </div>
+
+  <!-- External JS — MV3 compliant (no inline scripts) -->
+  <script src="blocked.js" type="module"></script>
+</body>
+</html>

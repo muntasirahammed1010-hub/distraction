@@ -1,0 +1,91 @@
+{
+  "manifest_version": 3,
+  "name": "FocusForge — Anti-Distraction Shield",
+  "version": "1.0.0",
+  "description": "Blocks distracting websites during Focus Sessions. Powered by FocusForge.",
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "_comment_service_worker": "The background service worker handles all URL interception logic. It runs persistently by using chrome.alarms to keep itself alive (MV3 service workers can be killed after ~30s of inactivity).",
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  },
+
+  "_comment_permissions": [
+    "declarativeNetRequest — Intercept/redirect/block network requests at the browser engine level. This is INSTANTANEOUS (no script roundtrip) and the only MV3-approved way to block requests.",
+    "storage — Persist the extension token, cached session status, and blocklist in chrome.storage.local.",
+    "alarms — Schedule periodic polling to keep the service worker alive and refresh session state.",
+    "tabs — Read the active tab URL so we can pass context (site name) to the Roast API.",
+    "notifications — Show a native OS notification when a block fires.",
+    "host_permissions — Required by declarativeNetRequest to redirect/block specific domains."
+  ],
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "storage",
+    "alarms",
+    "tabs",
+    "notifications"
+  ],
+
+  "_comment_host_permissions": "Broad match is required to allow declarativeNetRequest rules to fire on any domain. In a production extension, you'd enumerate specific domains for tighter security.",
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+
+  "_comment_action": "The popup HTML file — shown when the user clicks the extension icon in the toolbar.",
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png"
+    },
+    "default_title": "FocusForge"
+  },
+
+  "_comment_content_scripts": [
+    "Content scripts are injected into matching pages after the DOM is ready.",
+    "IMPORTANT: MV3 prohibits inline scripts (<script> tags in injected HTML).",
+    "All DOM manipulation goes in content.js; styles in content.css.",
+    "The content script provides a secondary visual overlay as a UX reinforcement",
+    "AFTER declarativeNetRequest has already fired the redirect."
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.js"],
+      "css": ["dist/content.css"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+
+  "_comment_web_accessible_resources": "The blocked.html page and its assets need to be accessible as extension pages referenced by redirect rules.",
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "blocked/blocked.html",
+        "blocked/blocked.css",
+        "icons/*.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "_comment_content_security_policy": [
+    "MV3 CSP is strict by default. We explicitly define it to document the surface area.",
+    "NO eval(), NO inline scripts. All scripts must be loaded from extension files.",
+    "connect-src allows calls to our Next.js web-app API and to ourselves (chrome-extension://)."
+  ],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://focus-forge.vercel.app https://localhost:3000;"
+  },
+
+  "minimum_chrome_version": "102"
+}

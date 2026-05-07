@@ -1,0 +1,202 @@
+/* =============================================================================
+   blocked.css — The Wall of Shame
+   =============================================================================
+   Dark, high-contrast, deliberately uncomfortable to look at.
+   The goal: make the blocked page memorable enough that students think twice
+   before trying to visit a distracting site again.
+   ============================================================================= */
+
+/* ─── CSS RESET + VARIABLES ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:          #09090b;       /* zinc-950 */
+  --surface:     #18181b;       /* zinc-900 */
+  --border:      #27272a;       /* zinc-800 */
+  --text:        #f4f4f5;       /* zinc-100 */
+  --muted:       #71717a;       /* zinc-500 */
+  --accent:      #dc2626;       /* red-600  */
+  --accent-glow: rgba(220, 38, 38, 0.2);
+  --violet:      #7c3aed;
+}
+
+/* ─── BODY ───────────────────────────────────────────────────────────────────── */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  /* Subtle animated gradient background for visual unease */
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 60%);
+}
+
+/* ─── CONTAINER ──────────────────────────────────────────────────────────────── */
+.container {
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ─── SHIELD ICON ────────────────────────────────────────────────────────────── */
+.shield-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1);    }
+  50%       { transform: scale(1.05); }
+}
+
+/* ─── HEADLINE ───────────────────────────────────────────────────────────────── */
+.headline {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 40px var(--accent-glow);
+  line-height: 1;
+}
+
+/* ─── SITE NAME ──────────────────────────────────────────────────────────────── */
+.site-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+}
+
+/* ─── ROAST CARD ─────────────────────────────────────────────────────────────── */
+.roast-card {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading state */
+.roast-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--violet);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Roast text */
+.roast-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.roast-text p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.roast-text p:first-child {
+  color: #fbbf24; /* amber-400 — first line gets more visual punch */
+  font-weight: 600;
+}
+
+/* Visibility utility */
+.hidden { display: none !important; }
+.visible { animation: fadeIn 0.5s ease-out; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── ACTIONS ────────────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+  border: none;
+  outline: none;
+}
+
+.btn:hover  { opacity: 0.9; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: var(--violet);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+/* ─── SESSION INFO ───────────────────────────────────────────────────────────── */
+.session-info {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
